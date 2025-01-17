@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Try from './Try';
+import Try from './TryClass';
 
 function getNumbers() {
   // 숫자 네개를 겹치지 않게 뽑는 함수
@@ -24,9 +24,11 @@ class NumberBaseball extends Component {
     e.preventDefault();
 
     if (this.state.value === this.state.answer.join('')) {
-      this.setState({
-        result: '딩동댕',
-        tries: [...this.state.tries, { try: this.state.value, result: '홈런' }],
+      this.setState((prevState) => {
+        return {
+          result: '딩동댕',
+          tries: [...prev.tries, { try: this.state.value, result: '홈런' }],
+        };
       });
       alert('게임을 다시 시작합니다');
       this.setState = {
@@ -62,15 +64,17 @@ class NumberBaseball extends Component {
           }
         }
 
-        this.setState({
-          tries: [
-            ...this.state.tries,
-            {
-              try: this.state.value,
-              result: `${strike} 스트라이크! ${ball} 볼 입니다!`,
-              value: '',
-            },
-          ],
+        this.setState((prevState) => {
+          return {
+            tries: [
+              ...prevState.tries,
+              {
+                try: this.state.value,
+                result: `${strike} 스트라이크! ${ball} 볼 입니다!`,
+                value: '',
+              },
+            ],
+          };
         });
       }
     }
