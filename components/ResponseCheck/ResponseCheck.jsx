@@ -6,8 +6,8 @@ const ResponseCheck = () => {
   const [result, setResult] = useState([]);
 
   const timeout = useRef(null);
-  const startTime = useRef(null);
-  const endTime = useRef(null);
+  const startTime = useRef();
+  const endTime = useRef();
 
   const onClickScreen = () => {
     if (state === 'waiting') {
