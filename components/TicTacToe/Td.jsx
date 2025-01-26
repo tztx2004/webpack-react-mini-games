@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from 'react';
-import { CLICK_CELL, CHANGE_TURN } from './TicTacToe';
+import { CLICK_CELL } from './TicTacToe';
 
 const Td = memo(({ rowIndex, cellIndex, dispatch, cellData }) => {
   const onClickId = useCallback(() => {
