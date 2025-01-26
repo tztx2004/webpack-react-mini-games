@@ -59,8 +59,11 @@ const TicTacToe = () => {
   const { tableData, turn, winner, recentCell } = state;
 
   const onClickTable = useCallback(() => {
-    dispatch({ type: SET_WINNER, winner: 'O' });
-  }, []);
+    if (winner) {
+      dispatch({ type: SET_WINNER, winner: 'O' });
+    }
+    dispatch({ type: SET_WINNER, winner: null });
+  }, [winner]);
 
   useEffect(() => {
     const [row, cell] = recentCell;
