@@ -1,4 +1,6 @@
+// libs
 import React, { memo, useCallback, useContext } from 'react';
+
 import {
   CLICK_MINE,
   CODE,
@@ -95,7 +97,6 @@ const Td = memo(({ rowIndex, cellIndex }) => {
       switch (tableData[rowIndex][cellIndex]) {
         case CODE.NORMAL:
         case CODE.MINE:
-          console.log('mine');
           dispatch({ type: FLAG_CELL, row: rowIndex, cell: cellIndex });
           return;
         case CODE.FLAG_MINE:
@@ -112,13 +113,24 @@ const Td = memo(({ rowIndex, cellIndex }) => {
     },
     [tableData[rowIndex][cellIndex], halted]
   );
+
+  return (
+    <RealTd
+      onClickTd={onClickTd}
+      onRightClickTd={onRightClickTd}
+      data={tableData[rowIndex][cellIndex]}
+    />
+  );
+});
+
+const RealTd = memo(({ onClickTd, onRightClickTd, data }) => {
   return (
     <td
+      style={getTdStyle(data)}
       onClick={onClickTd}
-      style={getTdStyle(tableData[rowIndex][cellIndex])}
       onContextMenu={onRightClickTd}
     >
-      {getTdText(tableData[rowIndex][cellIndex])}
+      {getTdText(data)}
     </td>
   );
 });

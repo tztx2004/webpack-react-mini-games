@@ -182,13 +182,6 @@ const reducer = (state, action) => {
       let halted = false;
       let result = '';
 
-      console.log(
-        state.data.row * state.data.cell - state.data.mine,
-
-        state.openedCount,
-        openedCount
-      );
-
       // 승리조건
       if (
         state.data.row * state.data.cell - state.data.mine ===
