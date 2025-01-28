@@ -1,5 +1,9 @@
-const React = require('react');
-const ReactDOM = require('react-dom/client');
+import React, { useState } from 'react';
+import * as ReactDOM from 'react-dom/client';
+
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 
 import { BrowserRouter, Link, Route, Routes } from 'react-router';
 
@@ -10,19 +14,12 @@ import ResponseCheck from './components/ResponseCheck/ResponseCheck';
 import RSPClass from './components/RSP/RSPClass';
 import TicTacToe from './components/TicTacToe/TicTacToe';
 import MineSearch from './components/MineSearch/MineSearch';
+import Gnb from './fixtures/Gnb';
 
 const root = ReactDOM.createRoot(document.querySelector('#root'));
 root.render(
   <BrowserRouter>
-    <div>
-      <Link to='/'>홈</Link>
-      <Link to='/mine-search'>지뢰찾기</Link>
-      <Link to='/tic-tac-toe'>틱택토</Link>
-      <Link to='/response-check'>반응속도 게임</Link>
-      <Link to='/rsp'>가위바위보</Link>
-      <Link to='/number-baseball'>숫자야구</Link>
-      <Link to='/word-relay'>끝말잇기</Link>
-    </div>
+    <BoxComponent />
 
     <Routes>
       <Route path='/mine-search' Component={MineSearch} />
@@ -34,3 +31,57 @@ root.render(
     </Routes>
   </BrowserRouter>
 );
+
+const checkCurrentPath = () => {
+  return Gnb.filter((x) => x.path === location.pathname)[0].value;
+};
+
+function BoxComponent() {
+  const [num, setNum] = useState(checkCurrentPath());
+
+  const onClick = (value) => {
+    setNum(value);
+  };
+
+  return (
+    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Tabs aria-label='basic tabs example' value={num}>
+        {Gnb.map((page) => {
+          return (
+            <Tab
+              key={page.value}
+              label={page.name}
+              value={page.value}
+              LinkComponent={Link}
+              to={page.path}
+              onClick={() => onClick(page.value)}
+            />
+          );
+        })}
+      </Tabs>
+    </Box>
+  );
+}
+
+function CustomTabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role='tabpanel'
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+}
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
