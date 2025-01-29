@@ -4,12 +4,14 @@ import React, { memo, useCallback, useContext } from 'react';
 import {
   CLICK_MINE,
   CODE,
+  FIRST_OPEN,
   FLAG_CELL,
   NORMALIZE_CELL,
   OPEN_CELL,
   QUESTION_CELL,
   TableContext,
 } from './MineSearch';
+import plantMines from './utils/plantMines';
 
 const getTdStyle = (code) => {
   switch (code) {
@@ -63,12 +65,14 @@ const getTdText = (code) => {
 };
 
 const Td = memo(({ rowIndex, cellIndex }) => {
-  const { tableData, dispatch, halted } = useContext(TableContext);
+  const { tableData, dispatch, halted, data, isMine } =
+    useContext(TableContext);
 
   const onClickTd = useCallback(() => {
     if (halted) {
       return;
     }
+
     switch (tableData[rowIndex][cellIndex]) {
       case CODE.OPENED:
       case CODE.FLAG_MINE:
@@ -77,6 +81,7 @@ const Td = memo(({ rowIndex, cellIndex }) => {
       case CODE.QUESTION:
         return;
       case CODE.NORMAL:
+        dispatch({ type: FIRST_OPEN });
         dispatch({ type: OPEN_CELL, row: rowIndex, cell: cellIndex });
         return;
       case CODE.MINE:
@@ -85,7 +90,7 @@ const Td = memo(({ rowIndex, cellIndex }) => {
       default:
         return;
     }
-  }, [tableData[rowIndex][cellIndex], halted]);
+  }, [tableData[rowIndex][cellIndex], halted, data]);
 
   const onRightClickTd = useCallback(
     (e) => {
