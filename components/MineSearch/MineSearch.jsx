@@ -1,6 +1,8 @@
 import React, { createContext, useEffect, useMemo, useReducer } from 'react';
 import Table from './Table';
 import Form from './From';
+import Title from '../../common/Components/Title/Title';
+import Wrapper from '../../common/Components/Wrapper/Wrapper';
 
 // actions
 export const START_GAME = 'START_GAME';
@@ -295,15 +297,18 @@ const MineSearch = () => {
   }, [halted]);
 
   return (
-    <TableContext.Provider value={value}>
-      <Form />
+    <Wrapper>
+      <TableContext.Provider value={value}>
+        <Title text={'지뢰찾기'} />
+        <Form />
 
-      <div>{timer}초</div>
+        <div>{timer}초</div>
 
-      <Table />
+        <Table />
 
-      <div>{result}</div>
-    </TableContext.Provider>
+        <div>{result}</div>
+      </TableContext.Provider>
+    </Wrapper>
   );
 };
 

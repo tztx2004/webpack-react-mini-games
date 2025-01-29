@@ -18,20 +18,23 @@ import Gnb from './fixtures/Gnb';
 
 const root = ReactDOM.createRoot(document.querySelector('#root'));
 root.render(
-  <BrowserRouter>
-    <BoxComponent />
+  <>
+    <BrowserRouter>
+      <BoxComponent />
 
-    <Routes>
-      <Route path='/mine-search' Component={MineSearch} />
-      <Route path='/tic-tac-toe' Component={TicTacToe} />
-      <Route path='/response-check' Component={ResponseCheck} />
-      <Route path='/rsp' Component={RSPClass} />
-      <Route path='/number-baseball' Component={NumberBaseball} />
-      <Route path='/word-relay' Component={WordRelay} />
-    </Routes>
-  </BrowserRouter>
+      <Routes>
+        <Route path='/mine-search' Component={MineSearch} />
+        <Route path='/tic-tac-toe' Component={TicTacToe} />
+        <Route path='/response-check' Component={ResponseCheck} />
+        <Route path='/rsp' Component={RSPClass} />
+        <Route path='/number-baseball' Component={NumberBaseball} />
+        <Route path='/word-relay' Component={WordRelay} />
+      </Routes>
+    </BrowserRouter>
+  </>
 );
 
+// 현재 url이 Gnb value와 일치하는지 검증
 const checkCurrentPath = () => {
   return Gnb.filter((x) => x.path === location.pathname)[0].value;
 };
@@ -61,27 +64,4 @@ function BoxComponent() {
       </Tabs>
     </Box>
   );
-}
-
-function CustomTabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role='tabpanel'
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-    </div>
-  );
-}
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
 }

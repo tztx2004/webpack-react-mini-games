@@ -1,5 +1,7 @@
 import React, { useCallback, useState, useContext, memo } from 'react';
 import { START_GAME, TableContext } from './MineSearch';
+import Inputs from '../../common/Components/Inputs/Inputs';
+import { Box, Button } from '@mui/material';
 
 const Form = memo(() => {
   const [row, setRow] = useState(10);
@@ -23,28 +25,28 @@ const Form = memo(() => {
   }, [row, cell, mine]);
 
   return (
-    <div>
-      <input
+    <Box sx={{ display: 'flex', gap: '10px' }}>
+      <Inputs
         type='number'
         placeholder='세로'
         value={row}
         onChange={onChangeRow}
       />
-      <input
+      <Inputs
         type='number'
         placeholder='가로'
         value={cell}
         onChange={onChangeCell}
       />
-      <input
+      <Inputs
         type='number'
         placeholder='지뢰'
         value={mine}
         onChange={onChangeMine}
       />
 
-      <button onClick={onClickBtn}>시작</button>
-    </div>
+      <Button onClick={onClickBtn}>시작</Button>
+    </Box>
   );
 });
 
