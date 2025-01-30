@@ -1,5 +1,7 @@
 import React, { useReducer, useCallback, useEffect } from 'react';
 import Table from './Table';
+import Wrapper from '../../common/Components/Wrapper/Wrapper';
+import Title from '../../common/Components/Title/Title';
 
 const initialState = {
   winner: '',
@@ -123,14 +125,16 @@ const TicTacToe = () => {
   }, [recentCell]);
 
   return (
-    <>
+    <Wrapper>
+      <Title text='틱택토' />
+
       <Table
         onClick={onClickTable}
         tableData={state.tableData}
         dispatch={dispatch}
       ></Table>
       {winner && <div>{winner}님의 승리</div>}
-    </>
+    </Wrapper>
   );
 };
 

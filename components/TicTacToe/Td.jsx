@@ -11,7 +11,9 @@ const Td = memo(({ rowIndex, cellIndex, dispatch, cellData }) => {
 
   return (
     <>
-      <td onClick={onClickId}>{cellData}</td>
+      <td onClick={onClickId} style={{ fontSize: '24px' }}>
+        {cellData}
+      </td>
     </>
   );
 });
