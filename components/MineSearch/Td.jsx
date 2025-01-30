@@ -11,14 +11,13 @@ import {
   QUESTION_CELL,
   TableContext,
 } from './MineSearch';
-import plantMines from './utils/plantMines';
 
 const getTdStyle = (code) => {
   switch (code) {
     case CODE.NORMAL:
     case CODE.MINE:
       return {
-        background: '#444',
+        background: '#528322',
       };
     case CODE.CLICKED_MINE:
       return {
@@ -36,7 +35,7 @@ const getTdStyle = (code) => {
     case CODE.FLAG_MINE:
     case CODE.FLAG:
       return {
-        background: 'red',
+        background: '#809b65',
       };
     default:
       return {
@@ -50,12 +49,12 @@ const getTdText = (code) => {
     case CODE.NORMAL:
       return '';
     case CODE.MINE:
-      return 'X';
+      return '';
     case CODE.CLICKED_MINE:
       return '💣';
     case CODE.FLAG_MINE:
     case CODE.FLAG:
-      return '!';
+      return '🚩';
     case CODE.QUESTION_MINE:
     case CODE.QUESTION:
       return '?';

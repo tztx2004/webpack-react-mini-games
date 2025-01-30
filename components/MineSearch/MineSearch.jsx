@@ -323,7 +323,7 @@ const TimerWrap = styled.div`
   min-width: 150px;
 
   padding: 8px 16px;
-  border: 1px solid;
+  border: 1px solid #949494;
   border-radius: 12px;
 
   > div {
