@@ -1,9 +1,14 @@
 import React, { createContext, useEffect, useMemo, useReducer } from 'react';
 import Table from './Table';
-import Form from './From';
+import Form from './Form';
+import Title from '../../common/Components/Title/Title';
+import Wrapper from '../../common/Components/Wrapper/Wrapper';
+import styled from '@emotion/styled';
+import plantMines from './utils/plantMines';
 
 // actions
 export const START_GAME = 'START_GAME';
+export const FIRST_OPEN = 'FIRST_OPEN';
 export const OPEN_CELL = 'OPEN_CELL';
 export const CLICK_MINE = 'CLICK_MINE';
 export const FLAG_CELL = 'FLAG_CELL';
@@ -31,6 +36,7 @@ export const TableContext = createContext({
 
 const initialState = {
   tableData: [],
+  isMine: false,
   data: {
     row: 0,
     cell: 0,
@@ -42,22 +48,7 @@ const initialState = {
   openedCount: 0,
 };
 
-const plantMine = (row, cell, mine) => {
-  const candidate = Array(row * cell)
-    .fill()
-    .map((arr, i) => {
-      return i;
-    });
-
-  const shuffle = [];
-  while (candidate.length > row * cell - mine) {
-    const chosen = candidate.splice(
-      Math.floor(Math.random() * candidate.length),
-      1
-    )[0];
-    shuffle.push(chosen);
-  }
-
+const makeBoard = (row, cell, mine) => {
   // 2차원 배열 만들기
   const data = [];
   for (let i = 0; i < row; i++) {
@@ -66,12 +57,6 @@ const plantMine = (row, cell, mine) => {
     for (let j = 0; j < cell; j++) {
       rowData.push(CODE.NORMAL);
     }
-  }
-
-  for (let k = 0; k < shuffle.length; k++) {
-    const ver = Math.floor(shuffle[k] / cell);
-    const hor = shuffle[k] % cell;
-    data[ver][hor] = CODE.MINE;
   }
 
   return data;
@@ -88,9 +73,21 @@ const reducer = (state, action) => {
           mine: action.mine,
         },
         openedCount: 0,
-        tableData: plantMine(action.row, action.cell, action.mine),
+        isMine: false,
+        tableData: makeBoard(action.row, action.cell, action.mine),
         halted: false, // 재시작 시 클릭 풀어줌,
         timer: 0,
+      };
+
+    case FIRST_OPEN: // 최초 게임을 생성이후 첫클릭 시 지뢰 심기
+      if (!state.isMine) {
+        plantMines(state.data.row, state.data.cell, state.data.mine, [
+          ...state.tableData,
+        ]);
+      }
+      return {
+        ...state,
+        isMine: true,
       };
 
     case OPEN_CELL: {
@@ -187,7 +184,6 @@ const reducer = (state, action) => {
         state.data.row * state.data.cell - state.data.mine ===
         state.openedCount + openedCount
       ) {
-        console.log('ttt');
         halted = true;
         result = `${state.timer}초만에 승리하셨습니다`;
       }
@@ -198,6 +194,7 @@ const reducer = (state, action) => {
         openedCount: state.openedCount + openedCount,
         halted,
         result,
+        isMine: !state.isMine ? true : state.isMine,
       };
     }
 
@@ -270,13 +267,15 @@ const reducer = (state, action) => {
 
 const MineSearch = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { tableData, halted, timer, result } = state;
+  const { tableData, halted, timer, result, data, isMine } = state;
 
   const value = useMemo(
     () => ({
       tableData,
       halted,
       dispatch,
+      data,
+      isMine,
     }),
     [tableData, halted]
   );
@@ -295,16 +294,48 @@ const MineSearch = () => {
   }, [halted]);
 
   return (
-    <TableContext.Provider value={value}>
-      <Form />
+    <Wrapper>
+      <TableContext.Provider value={value}>
+        <Title text={'지뢰찾기'} />
+        <Form />
 
-      <div>{timer}초</div>
+        <TimerWrap>
+          <p>소요시간</p>
+          <div>
+            <p>{timer}</p>
+            <p>초</p>
+          </div>
+        </TimerWrap>
 
-      <Table />
+        <Table />
 
-      <div>{result}</div>
-    </TableContext.Provider>
+        <div>{result}</div>
+      </TableContext.Provider>
+    </Wrapper>
   );
 };
+
+const TimerWrap = styled.div`
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: fit-content;
+  min-width: 150px;
+
+  padding: 8px 16px;
+  border: 1px solid #949494;
+  border-radius: 12px;
+
+  > div {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex: 1;
+
+    > p {
+      min-width: 20px;
+    }
+  }
+`;
 
 export default MineSearch;

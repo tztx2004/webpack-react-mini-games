@@ -24,8 +24,13 @@ module.exports = {
           plugins: [
             '@babel/plugin-proposal-class-properties',
             'react-refresh/babel',
+            '@emotion/babel-plugin',
           ],
         },
+      },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },
@@ -47,5 +52,6 @@ module.exports = {
     devMiddleware: { publicPath: '/dist' },
     static: { directory: path.resolve(__dirname) },
     hot: true,
+    historyApiFallback: true,
   },
 };
